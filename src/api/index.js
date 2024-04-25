@@ -1,4 +1,4 @@
-const BASE_URL = "https://243c-46-42-244-203.ngrok-free.app"
+const BASE_URL = "http://localhost:3000"
 
 const callApi = async (endpoint, method, data, extraHeaders = {}) => {
     try {

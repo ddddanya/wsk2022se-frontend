@@ -7,13 +7,10 @@ import {useNavigate} from "react-router-dom";
 
 const sortOptions = [
     {name: 'Popularity: High to Low', sortBy: "popular", sortDirection: "desc", href: '#'},
-    {name: 'Popularity: Low to High', sortBy: "popular", sortDirection: "asc", href: '#'},
     {},
     {name: 'Title: A to Z', sortBy: "title", sortDirection: "asc", href: '#'},
-    {name: 'Title: Z to A', sortBy: "title", sortDirection: "desc", href: '#'},
     {},
-    {name: 'Recently Added', sortBy: "uploaddate", sortDirection: "desc", href: '#'},
-    {name: 'Oldest', sortBy: "uploaddate", sortDirection: "asc", href: '#'},
+    {name: 'Recently Added', sortBy: "uploaddate", sortDirection: "", href: '#'},
 ]
 
 function classNames(...classes) {
@@ -23,9 +20,10 @@ function classNames(...classes) {
 const Home = () => {
     const nav = useNavigate()
     const [games, setGames] = useState({content: []})
-    const [sort, setSort] = useState(sortOptions[0])
+    const [sort, setSort] = useState(sortOptions[0].sortBy)
     const [page, setPage] = useState(0)
     const [size, setSize] = useState(9)
+    const [sortDirection, setSortDirection] = useState("desc")
 
     useEffect(() => {
         document.title = "Home | WorldSkills Games"
@@ -42,11 +40,12 @@ const Home = () => {
         fetchGames()
     }, []);
 
-    const updateSort = (option) => {
-        setSort(option)
+    const updateSort = (by, dir) => {
+        setSort(by)
+        setSortDirection(dir)
         updateGames({
-            sortBy: option.sortBy,
-            sortDirection: option.sortDirection
+            sortBy: by,
+            sortDirection: dir
         })
 
     }
@@ -93,8 +92,8 @@ const Home = () => {
             if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return
             setPage(page + 1)
             updateGames2({
-                sortBy: sort.sortBy,
-                sortDirection: sort.sortDirection,
+                sortBy: sort,
+                sortDirection: sortDirection,
                 page: page + 1,
                 size: size
             })
@@ -102,7 +101,7 @@ const Home = () => {
 
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
-    }, [page, size, sort])
+    }, [page, size, sort, sortDirection])
 
     return (
         <>
@@ -137,14 +136,55 @@ const Home = () => {
                                             {({active}) => (
                                                 <a
                                                     onClick={() => {
-                                                        updateSort(option)
+                                                        updateSort(option.sortBy, sortDirection)
                                                     }}
                                                     className={classNames(
                                                         active ? 'bg-gray-100' : '',
                                                         'block px-4 py-2 text-sm font-medium text-gray-900'
                                                     )}
                                                 >
-                                                    {option.name}
+                                                    {option.sortBy}
+                                                </a>
+                                            )}
+                                        </Menu.Item>
+                                    ))}
+                                </div>
+                            </Menu.Items>
+                        </Transition>
+                    </Menu>
+                    <Menu as="div" className="relative inline-block text-left">
+                        <div>
+                            <div className={"text-sm font-medium text-gray-900 mb-2"}>{sort.name}</div>
+                            <Menu.Button
+                                className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900 rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 px-6 py-2 mb-6">
+                                Order
+                            </Menu.Button>
+                        </div>
+                        <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-100"
+                            enterFrom="transform opacity-0 scale-95"
+                            enterTo="transform opacity-100 scale-100"
+                            leave="transition ease-in duration-75"
+                            leaveFrom="transform opacity-100 scale-100"
+                            leaveTo="transform opacity-0 scale-95"
+                        >
+                            <Menu.Items
+                                className="absolute left-0 z-10 mt-2 w-40 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                <div className="py-1">
+                                    {sortOptions.map((option) => (
+                                        <Menu.Item key={option}>
+                                            {({active}) => (
+                                                <a
+                                                    onClick={() => {
+                                                        updateSort(sort, option.sortDirection)
+                                                    }}
+                                                    className={classNames(
+                                                        active ? 'bg-gray-100' : '',
+                                                        'block px-4 py-2 text-sm font-medium text-gray-900'
+                                                    )}
+                                                >
+                                                    {option.sortDirection}
                                                 </a>
                                             )}
                                         </Menu.Item>

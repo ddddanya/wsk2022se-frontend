@@ -34,7 +34,7 @@ const Game = () => {
                 <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8 mt-6">
 
                     <iframe
-                        src={API_BASE_URL + game?.gamePath}
+                        src={game?.gamePath}
                         title={game?.title}
                         width="700px"
                         height="400px"
@@ -90,7 +90,7 @@ const Game = () => {
                                         </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-200">
-                                        {scores.slice(0, 10).map((score, i) => (
+                                        {scores && scores.slice(0, 10).map((score, i) => (
                                             <tr key={score.username} onClick={() => {
                                                 nav("/profile/" + score.username)
                                             }}>

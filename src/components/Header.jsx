@@ -50,7 +50,7 @@ export default function Header() {
                                         src="https://upload.wikimedia.org/wikipedia/ru/a/ad/Worldskills_logo.png"
                                         alt="Your Company"
                                     />
-                                    <div className="font-semibold text-lg text-gray-900 ml-3">Games</div>
+                                    <div className="font-semibold text-lg text-gray-900 ml-3">WorldSkills Games</div>
                                 </div>
                             </div>
                             <div className="flex items-center">
